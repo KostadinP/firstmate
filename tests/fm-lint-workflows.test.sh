@@ -158,11 +158,14 @@ jobs:
       - name: Compatibility pointers must stay intact
         run: |
           set -eu
-          cmp -s CLAUDE.md - <<'EOF' || exit 1
-<!-- Points Claude at AGENTS.md via import; edit AGENTS.md, not this file. -->
-@AGENTS.md
+          [ -L CLAUDE.md ] || exit 1
+          case "$(readlink CLAUDE.md)" in
+            AGENTS.md|./AGENTS.md) ;;
+            *) exit 1 ;;
+          esac
+          cat <<'EOF'
+claude-link-check-ok
 EOF
-          echo ok
 YAML
 }
 
