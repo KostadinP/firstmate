@@ -5115,6 +5115,7 @@ EOF
 // turn-ended touch stays the watcher's wake NOTIFICATION, never current-state
 // truth.
 import { execFile } from "node:child_process";
+const notifyTurnEnd = $busy_notify_turnend;
 const busyEvent = (state, event) =>
   new Promise((resolve) => {
     execFile("$FM_ROOT/bin/fm-busy-event.sh", [
@@ -5159,7 +5160,7 @@ const makeHandler = () => {
         activeSession = null;
         await busyEvent("idle", type.replace(/\./g, "-"));
       }
-      await touchTurnEnded();
+      if (notifyTurnEnd) await touchTurnEnded();
       return;
     }
     if (type === "session.status") {
@@ -5181,7 +5182,7 @@ const makeHandler = () => {
         activeSession = null;
         await busyEvent("idle", "session-idle");
       }
-      await touchTurnEnded();
+      if (notifyTurnEnd) await touchTurnEnded();
     }
   };
 };
