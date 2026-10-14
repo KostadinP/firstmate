@@ -1,0 +1,10 @@
+cwd=/tmp/fm-tst-abs.IFb6zi/fleet-treehouse/a-rather-long-worktree-pool-directory/slot-0123456789/project-under-test  (HOME=/home/kostadin)
+opencode 1.18.31
+S2 busy mid-turn, abs rail                       fixed=empty    base=pending
+rail-row: 54:  ┃                                                                                                                                                                                                                                                                 /tmp/fm-tst-abs.IFb6zi/fleet-
+S1 idle, empty composer, abs rail                fixed=empty    base=pending
+S3 typed text + abs rail                         fixed=pending  base=pending
+S4 lone slash typed                              fixed=pending  base=pending
+S5 /exit typed at left edge                      fixed=pending  base=pending
+S6 abs path token typed at left edge             fixed=pending  base=pending
+S1b idle again after clearing                    fixed=empty    base=pending

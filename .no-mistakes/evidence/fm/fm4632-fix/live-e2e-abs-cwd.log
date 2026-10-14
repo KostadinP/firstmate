@@ -1,0 +1,62 @@
+ok - opencode mid-turn absolute cwd rail on a 300-column pane reads empty
+
+  ┃                                                                                                                                                                                                                                                                 Sleep 25 shell command
+  ┃  Run the shell command 'sleep 25' and then reply with exactly DONE.
+  ┃                                                                                                                                                                                                                                                                 Context
+                                                                                                                                                                                                                                                                    32,176 tokens
+     + Thought: 149ms                                                                                                                                                                                                                                               3% used
+                                                                                                                                                                                                                                                                    $0.00 spent
+  ┃
+  ┃  $ sleep 25                                                                                                                                                                                                                                                     ▼ MCP
+  ┃                                                                                                                                                                                                                                                                 • atlassian-invited MCP error -32000:
+  ┃  (no output)                                                                                                                                                                                                                                                       Connection closed
+  ┃                                                                                                                                                                                                                                                                 • aws-invited-dev MCP error -32000:
+                                                                                                                                                                                                                                                                      Connection closed
+     DONE                                                                                                                                                                                                                                                           • aws-invited-prod MCP error -32000:
+                                                                                                                                                                                                                                                                      Connection closed
+     ▣  Build · DeepSeek V4.1 Flash · 41.2s                                                                                                                                                                                                                         • aws-invited-uat Connected
+                                                                                                                                                                                                                                                                    • aws-kostadin MCP error -32000:
+                                                                                                                                                                                                                                                                      Connection closed
+                                                                                                                                                                                                                                                                    • context7 Connected
+                                                                                                                                                                                                                                                                    • github Connected
+                                                                                                                                                                                                                                                                    • intellij Connected
+                                                                                                                                                                                                                                                                    • splunk-apm-invited MCP error -
+                                                                                                                                                                                                                                                                      32000: Connection closed
+                                                                                                                                                                                                                                                                    • splunk-invited MCP error -32000:
+                                                                                                                                                                                                                                                                      Connection closed
+
+                                                                                                                                                                                                                                                                    LSP
+                                                                                                                                                                                                                                                                    LSPs are disabled
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  ┃                                                                                                                                                                                                                                                                 /tmp/fm-opencode-abs-cwd.zBgFr6/a-
+  ┃                                                                                                                                                                                                                                                                 rather-long-worktree-pool-directory/
+  ┃                                                                                                                                                                                                                                                                 slot-0123456789/project-under-test:
+  ┃  Build · DeepSeek V4.1 Flash OpenCode Go · max                                                                                                                                                                                                                  master
+  ╹▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀
+   /tmp/fm-opencode-abs-cwd.zBgFr6/a-rather-long-worktree-pool-directory/slot-0123456789/project-under-test                                                                                                                  32.2K (3%) · $0.00  ctrl+p commands    • OpenCode 1.18.31
+
+not ok - the turn never finished

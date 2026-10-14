@@ -1,0 +1,21 @@
+busy  fix=empty  base=pending
+== cwd: /tmp/fm-lab.wArerV/treehouse/worktree-pool-directory-long-name/slot-0123456789/project-under-test
+idle  fix=empty  base=pending
+typed 'hello world'  fix=pending  base=pending
+typed '/tmp/some/abs/token'  fix=pending  base=pending
+typed '/'  fix=pending  base=pending
+typed '/exit'  fix=pending  base=pending
+after clear  fix=empty
+== base fm-send:
+●  watcher supervision needs Stop-owned automatic recovery; inspect the hook registration and startup status before ending the turn.
+●━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+fm-send: doorbell skipped (composer visibly holds pending text); the steer is durably recorded at /tmp/fm-lab.wArerV/home/state/w1.inbox/001.msg and the watcher will re-ring
+rc=0
+pane lines mentioning inbox after base send: 0
+== fix fm-send:
+WARNING: watcher still down (same stale episode; last beat: never, grace 300s) - full banner already printed this episode.
+rc=0
+pane lines mentioning inbox after fix send: 1
+inbox record: 001.msg
+inbox record: 002.msg
+inbox record: handled

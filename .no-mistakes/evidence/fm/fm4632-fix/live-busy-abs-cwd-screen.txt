@@ -1,0 +1,60 @@
+
+  ┃                                                                                                                                                                                                                                                                 New session - 2026-10-14T20:22:05.
+  ┃  Reply with exactly the word OK and nothing else.                                                                                                                                                                                                               329Z
+  ┃
+                                                                                                                                                                                                                                                                    Context
+     ▣  Build · DeepSeek V4.1 Flash                                                                                                                                                                                                                                 0 tokens
+                                                                                                                                                                                                                                                                    0% used
+                                                                                                                                                                                                                                                                    $0.00 spent
+
+                                                                                                                                                                                                                                                                    LSP
+                                                                                                                                                                                                                                                                    LSPs are disabled
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  ┃
+  ┃                                                                                                                                                                                                                                                                 /tmp/fm-lab.wK02YP/treehouse/worktree-
+  ┃                                                                                                                                                                                                                                                                 pool-directory-long-name/slot-
+  ┃  Build · DeepSeek V4.1 Flash OpenCode Go · max                                                                                                                                                                                                                  0123456789/project-under-test:master
+  ╹▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀
+   ⬝⬝⬝⬝⬝■■■  esc interrupt                                                                                                                                                                                                           tab agents  ctrl+p commands    • OpenCode 1.18.31
+

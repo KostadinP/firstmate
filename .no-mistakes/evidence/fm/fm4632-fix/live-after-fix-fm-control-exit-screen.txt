@@ -1,0 +1,60 @@
+opencode
+kostadin@2e3afee67138:/tmp/fm-lab.wK02YP/treehouse/worktree-pool-directory-long-name/slot-0123456789/project-under-test$ opencode
+                                   ▄
+  █▀▀█ █▀▀█ █▀▀█ █▀▀▄ █▀▀▀ █▀▀█ █▀▀█ █▀▀█
+  █  █ █  █ █▀▀▀ █  █ █    █  █ █  █ █▀▀▀
+  ▀▀▀▀ █▀▀▀ ▀▀▀▀ ▀▀▀▀ ▀▀▀▀ ▀▀▀▀ ▀▀▀▀ ▀▀▀▀
+
+  Session   OK
+  Continue  opencode -s ses_ec3ebb4eeffesXIVN3MXVxNrXY
+
+kostadin@2e3afee67138:/tmp/fm-lab.wK02YP/treehouse/worktree-pool-directory-long-name/slot-0123456789/project-under-test$
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

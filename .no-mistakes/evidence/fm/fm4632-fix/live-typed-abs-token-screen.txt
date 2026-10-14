@@ -1,0 +1,60 @@
+
+  ┃                                                                                                                                                                                                                                                                 Request for single-word OK reply
+  ┃  Reply with exactly the word OK and nothing else.
+  ┃                                                                                                                                                                                                                                                                 Context
+                                                                                                                                                                                                                                                                    33,172 tokens
+     + Thought: 109ms                                                                                                                                                                                                                                               3% used
+                                                                                                                                                                                                                                                                    $0.00 spent
+     OK
+                                                                                                                                                                                                                                                                    ▼ MCP
+     ▣  Build · DeepSeek V4.1 Flash · 6.7s                                                                                                                                                                                                                          • atlassian-invited MCP error -32000:
+                                                                                                                                                                                                                                                                       Connection closed
+                                                                                                                                                                                                                                                                    • aws-invited-dev MCP error -32000:
+                                                                                                                                                                                                                                                                      Connection closed
+                                                                                                                                                                                                                                                                    • aws-invited-prod MCP error -32000:
+                                                                                                                                                                                                                                                                      Connection closed
+                                                                                                                                                                                                                                                                    • aws-invited-uat Connected
+                                                                                                                                                                                                                                                                    • aws-kostadin MCP error -32000:
+                                                                                                                                                                                                                                                                      Connection closed
+                                                                                                                                                                                                                                                                    • context7 Connected
+                                                                                                                                                                                                                                                                    • github Connected
+                                                                                                                                                                                                                                                                    • intellij Connected
+                                                                                                                                                                                                                                                                    • splunk-apm-invited MCP error -
+                                                                                                                                                                                                                                                                      32000: Connection closed
+                                                                                                                                                                                                                                                                    • splunk-invited MCP error -32000:
+                                                                                                                                                                                                                                                                      Connection closed
+
+                                                                                                                                                                                                                                                                    LSP
+                                                                                                                                                                                                                                                                    LSPs are disabled
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  ┃ No matching items                                                                                                                                                                                                                                          ┃
+  ┃
+  ┃  /tmp/some/abs/token                                                                                                                                                                                                                                            /tmp/fm-lab.wArerV/treehouse/worktree-
+  ┃                                                                                                                                                                                                                                                                 pool-directory-long-name/slot-
+  ┃  Build · DeepSeek V4.1 Flash OpenCode Go · max                                                                                                                                                                                                                  0123456789/project-under-test:master
+  ╹▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀
+   /tmp/fm-lab.wArerV/treehouse/worktree-pool-directory-long-name/slot-0123456789/project-under-test                                                                                                                         33.2K (3%) · $0.00  ctrl+p commands    • OpenCode 1.18.31
+

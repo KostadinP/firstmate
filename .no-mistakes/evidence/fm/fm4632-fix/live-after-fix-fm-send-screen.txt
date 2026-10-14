@@ -1,0 +1,60 @@
+
+  ┃                                                                                                                                                                                                                                                                 Request for single-word OK reply
+  ┃  Reply with exactly the word OK and nothing else.
+  ┃                                                                                                                                                                                                                                                                 Context
+                                                                                                                                                                                                                                                                    33,382 tokens
+     + Thought: 109ms                                                                                                                                                                                                                                               3% used
+                                                                                                                                                                                                                                                                    $0.00 spent
+     OK
+                                                                                                                                                                                                                                                                    ▼ MCP
+     ▣  Build · DeepSeek V4.1 Flash · 6.7s                                                                                                                                                                                                                          • atlassian-invited MCP error -32000:
+                                                                                                                                                                                                                                                                       Connection closed
+  ┃                                                                                                                                                                                                                                                                 • aws-invited-dev MCP error -32000:
+  ┃  : Firstmate instruction waiting: list "$FM_TASK_INBOX"/*.msg in your 'w1.inbox' steering inbox, read and act on each in numeric order, then mv each into its handled/.                                                                                           Connection closed
+  ┃                                                                                                                                                                                                                                                                 • aws-invited-prod MCP error -32000:
+                                                                                                                                                                                                                                                                      Connection closed
+     + Thought: 814ms                                                                                                                                                                                                                                               • aws-invited-uat Connected
+                                                                                                                                                                                                                                                                    • aws-kostadin MCP error -32000:
+  ┃                                                                                                                                                                                                                                                                   Connection closed
+  ┃  $ echo "FM_TASK_INBOX=$FM_TASK_INBOX"; ls -la "$FM_TASK_INBOX" 2>&1                                                                                                                                                                                            • context7 Connected
+  ┃                                                                                                                                                                                                                                                                 • github Connected
+  ┃  FM_TASK_INBOX=                                                                                                                                                                                                                                                 • intellij Connected
+  ┃  ls: cannot access '': No such file or directory                                                                                                                                                                                                                • splunk-apm-invited MCP error -
+  ┃                                                                                                                                                                                                                                                                   32000: Connection closed
+                                                                                                                                                                                                                                                                    • splunk-invited MCP error -32000:
+     ▣  Build · DeepSeek V4.1 Flash                                                                                                                                                                                                                                   Connection closed
+
+                                                                                                                                                                                                                                                                    LSP
+                                                                                                                                                                                                                                                                    LSPs are disabled
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  ┃
+  ┃                                                                                                                                                                                                                                                                 /tmp/fm-lab.wArerV/treehouse/worktree-
+  ┃                                                                                                                                                                                                                                                                 pool-directory-long-name/slot-
+  ┃  Build · DeepSeek V4.1 Flash OpenCode Go · max                                                                                                                                                                                                                  0123456789/project-under-test:master
+  ╹▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀
+   ■■■■⬝⬝⬝⬝  esc interrupt                                                                                                                                                                                                   33.4K (3%) · $0.00  ctrl+p commands    • OpenCode 1.18.31
+

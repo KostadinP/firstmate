@@ -1,0 +1,11 @@
+busy  fix=empty  base=pending
+== cwd: /tmp/fm-lab.kLwJkp/treehouse/worktree-pool-directory-long-name/slot-0123456789/project-under-test
+idle  fix=empty  base=pending
+== base fm-control exit:
+error: task w1's composer visibly holds pending text; refusing to type the /exit exit command because it would concatenate onto that text. Clear or submit the pending text, then retry 'exit'
+rc=1
+opencode alive after base exit: yes
+== fix fm-control exit:
+stopped w1 harness=opencode backend=tmux endpoint=abs:fm-w1 worktree=/tmp/fm-lab.kLwJkp/treehouse/worktree-pool-directory-long-name/slot-0123456789/project-under-test
+rc=0
+opencode alive after fix exit: no
