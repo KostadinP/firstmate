@@ -5809,11 +5809,17 @@ opencode)
   # The resolved absolute path probed for the version gate above, so the pane
   # runs exactly the binary whose major was recorded. An unresolved executable
   # keeps the bare `opencode` the pane resolves itself (pre-gate fallback).
+  # A detected OpenCode 2 also gets --standalone: its default launch attaches to
+  # the shared background service, which hosts plugins with the service's own
+  # environment and ignores this pane's OPENCODE_CONFIG_CONTENT, so per-worker
+  # model, permissions, FM_HOME, and lock ancestry would be wrong.
   if [ -n "$OPENCODE_BIN" ]; then
-    LAUNCH=${LAUNCH//__OPENCODEBIN__/"$(shell_quote "$OPENCODE_BIN")"}
+    oc_launch_bin=$(shell_quote "$OPENCODE_BIN")
   else
-    LAUNCH=${LAUNCH//__OPENCODEBIN__/opencode}
+    oc_launch_bin=opencode
   fi
+  [ "$OPENCODE_MAJOR" -lt 2 ] || oc_launch_bin="$oc_launch_bin --standalone"
+  LAUNCH=${LAUNCH//__OPENCODEBIN__/"$oc_launch_bin"}
   ;;
 esac
 LAUNCH=${LAUNCH//__WORKTREE__/$sq_worktree}

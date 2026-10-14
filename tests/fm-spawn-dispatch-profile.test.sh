@@ -859,7 +859,7 @@ test_opencode_threads_model_and_effort_variant() {
   # selected model and per-model reasoning effort ride the OPENCODE_CONFIG_CONTENT
   # JSON the launch already writes, keyed to the default build agent.
   assert_contains "$launch" \
-    "OPENCODE_CONFIG_CONTENT='{\"permission\":{\"*\":\"allow\"},\"model\":\"anthropic/claude-sonnet-4-5\",\"agent\":{\"build\":{\"model\":\"anthropic/claude-sonnet-4-5\",\"variant\":\"high\"}}}' '$FAKEBIN_DIR/opencode' --prompt" \
+    "OPENCODE_CONFIG_CONTENT='{\"permission\":{\"*\":\"allow\"},\"model\":\"anthropic/claude-sonnet-4-5\",\"agent\":{\"build\":{\"model\":\"anthropic/claude-sonnet-4-5\",\"variant\":\"high\"}}}' '$FAKEBIN_DIR/opencode' --standalone --prompt" \
     "opencode launch did not write the model and effort as the build agent's config"
   assert_not_contains "$launch" "--model" "opencode interactive launch must not pass removed --model"
   assert_not_contains "$launch" "--effort" "opencode launch must not pass unsupported --effort"
@@ -880,7 +880,7 @@ test_opencode_without_effort_keeps_launch_config_unchanged() {
   assert_meta_profile "$HOME_DIR/state/$id.meta" opencode anthropic/claude-sonnet-4-5 default
   launch=$(cat "$LAUNCH_LOG")
   assert_contains "$launch" \
-    "OPENCODE_CONFIG_CONTENT='{\"permission\":{\"*\":\"allow\"},\"model\":\"anthropic/claude-sonnet-4-5\",\"agent\":{\"build\":{\"model\":\"anthropic/claude-sonnet-4-5\"}}}' '$FAKEBIN_DIR/opencode' --prompt" \
+    "OPENCODE_CONFIG_CONTENT='{\"permission\":{\"*\":\"allow\"},\"model\":\"anthropic/claude-sonnet-4-5\",\"agent\":{\"build\":{\"model\":\"anthropic/claude-sonnet-4-5\"}}}' '$FAKEBIN_DIR/opencode' --standalone --prompt" \
     "opencode launch without effort must still pin the model through config"
   assert_not_contains "$launch" '"variant"' "opencode launch without effort must not write a variant"
   assert_not_contains "$launch" "--model" "opencode interactive launch must not pass removed --model"
@@ -899,7 +899,7 @@ test_opencode_emits_variant_for_openai_family_effort() {
   assert_meta_profile "$HOME_DIR/state/$id.meta" opencode openai/gpt-5.6-sol xhigh
   launch=$(cat "$LAUNCH_LOG")
   assert_contains "$launch" \
-    "OPENCODE_CONFIG_CONTENT='{\"permission\":{\"*\":\"allow\"},\"model\":\"openai/gpt-5.6-sol\",\"agent\":{\"build\":{\"model\":\"openai/gpt-5.6-sol\",\"variant\":\"xhigh\"}}}' '$FAKEBIN_DIR/opencode' --prompt" \
+    "OPENCODE_CONFIG_CONTENT='{\"permission\":{\"*\":\"allow\"},\"model\":\"openai/gpt-5.6-sol\",\"agent\":{\"build\":{\"model\":\"openai/gpt-5.6-sol\",\"variant\":\"xhigh\"}}}' '$FAKEBIN_DIR/opencode' --standalone --prompt" \
     "opencode launch did not write the openai family effort as the build agent's variant"
   assert_not_contains "$launch" "--model" "opencode interactive launch must not pass removed --model"
   pass "opencode emits the variant for an effort the openai family exposes"
@@ -917,7 +917,7 @@ test_opencode_omits_variant_when_model_family_lacks_effort() {
   assert_meta_profile "$HOME_DIR/state/$id.meta" opencode anthropic/claude-sonnet-4-5 medium
   launch=$(cat "$LAUNCH_LOG")
   assert_contains "$launch" \
-    "OPENCODE_CONFIG_CONTENT='{\"permission\":{\"*\":\"allow\"},\"model\":\"anthropic/claude-sonnet-4-5\",\"agent\":{\"build\":{\"model\":\"anthropic/claude-sonnet-4-5\"}}}' '$FAKEBIN_DIR/opencode' --prompt" \
+    "OPENCODE_CONFIG_CONTENT='{\"permission\":{\"*\":\"allow\"},\"model\":\"anthropic/claude-sonnet-4-5\",\"agent\":{\"build\":{\"model\":\"anthropic/claude-sonnet-4-5\"}}}' '$FAKEBIN_DIR/opencode' --standalone --prompt" \
     "opencode must pin the model while omitting a variant the family lacks"
   assert_not_contains "$launch" '"variant"' "opencode must omit the variant when the model family lacks the effort"
   assert_not_contains "$launch" "--model" "opencode interactive launch must not pass removed --model"
@@ -947,6 +947,8 @@ test_opencode1_passes_model_flag_and_variant_only_config() {
     "opencode 1.x launch must pass --model and carry the effort as the build agent's variant"
   assert_not_contains "$launch" '"model":"anthropic/claude-sonnet-4-5","agent"' \
     "opencode 1.x launch must not pin the 2.x global model field"
+  assert_not_contains "$launch" "--standalone" \
+    "opencode 1.x launch must not pass the 2.x-only --standalone flag"
   pass "opencode 1.x keeps the --model flag and the variant-only config"
 }
 
@@ -993,7 +995,7 @@ test_opencode_probe_and_launch_share_resolved_executable() {
   *) fail "probe resolved a non-absolute opencode path: $probed" ;;
   esac
   launch=$(cat "$LAUNCH_LOG")
-  assert_contains "$launch" "}' '$probed' --prompt" \
+  assert_contains "$launch" "}' '$probed' --standalone --prompt" \
     "opencode launch must run the exact executable the version probe resolved"
   assert_not_contains "$launch" "}' opencode --prompt" \
     "opencode launch must not fall back to a bare command the pane re-resolves"
@@ -1025,6 +1027,8 @@ test_opencode_unknown_version_takes_1x_launch_path() {
     "an unparseable opencode version must take the 1.x launch (--model + variant-only config)"
   assert_not_contains "$launch" '"model":"anthropic/claude-sonnet-4-5","agent"' \
     "an unparseable opencode version must not pin the 2.x global model field"
+  assert_not_contains "$launch" "--standalone" \
+    "an unparseable opencode version must not pass the 2.x-only --standalone flag"
   pass "opencode with an unparseable version falls back to the 1.x launch path"
 }
 
