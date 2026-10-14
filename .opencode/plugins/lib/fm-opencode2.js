@@ -30,6 +30,8 @@ export function setupToolExecuteBefore(ctx, handler) {
 
 export function contextDirectory(ctx) {
   const location = ctx?.location;
+  // OpenCode 2.0.x exposes the plugin's project as ctx.location.project.
+  if (typeof location?.project?.directory === "string") return location.project.directory;
   if (typeof ctx?.worktree === "string") return ctx.worktree;
   if (typeof ctx?.directory === "string") return ctx.directory;
   if (typeof location?.directory === "string") return location.directory;
@@ -66,6 +68,20 @@ function sessionIdentity(properties) {
   return { id, parentID };
 }
 
+// Every terminal execution event ends a turn: an interrupted or failed turn
+// must keep supervision exactly like a succeeded one. A server shutdown is not
+// a turn end the session can act on.
+const EXECUTION_ENDED = new Set([
+  "session.execution.succeeded",
+  "session.execution.failed",
+  "session.execution.interrupted",
+]);
+
+export function executionEnded(event) {
+  if (!EXECUTION_ENDED.has(eventType(event))) return false;
+  return eventProperties(event).reason !== "shutdown";
+}
+
 // Fire the turn-end signal on every ROOT (top-level) session's turn end and
 // skip only true child sessions. OpenCode 2's session.execution.* events fire
 // per session, so a turn that spawns a subagent also emits the child session's
@@ -80,7 +96,7 @@ export function createTurnEndLatch() {
   const latch = (event) => {
     const { id, parentID } = sessionIdentity(eventProperties(event));
     if (id && parentID) childSessions.add(id);
-    if (eventType(event) !== "session.execution.succeeded") return "";
+    if (!executionEnded(event)) return "";
     if (!id || parentID || childSessions.has(id)) return "";
     return id;
   };
@@ -125,6 +141,8 @@ export async function promptSession(ctx, client, sessionID, text) {
   const body = { parts: [{ type: "text", text }] };
   const attempts = [];
   if (ctx?.session?.prompt) {
+    // The OpenCode 2.0.x plugin context takes a flat { sessionID, text }.
+    attempts.push(() => ctx.session.prompt({ sessionID, text }));
     attempts.push(() => ctx.session.prompt({ sessionID, prompt: { text }, delivery: "queue" }));
     attempts.push(() => ctx.session.prompt({ sessionID, prompt: { text } }));
     attempts.push(() => ctx.session.prompt({ path: { sessionID }, body: { prompt: { text } } }));
