@@ -123,6 +123,9 @@ run_spawn() {
     FM_FAKE_PI_VERSION="${FM_TEST_PI_VERSION:-0.84.0}" \
     FM_FAKE_OPENCODE_VERSION="${FM_TEST_OPENCODE_VERSION:-2.0.21}" \
     FM_FAKE_OPENCODE_PROBE_LOG="${FM_TEST_OPENCODE_PROBE_LOG:-}" \
+    FM_FAKE_OPENCODE_TURN="${FM_TEST_OPENCODE_TURN:-auto}" \
+    FM_FAKE_ENTER_LOG="${FM_TEST_ENTER_LOG:-}" \
+    FM_OPENCODE_POLL_INTERVAL="${FM_TEST_OPENCODE_POLL_INTERVAL:-0.01}" \
     FM_FAKE_CURSOR_MODELS="${FM_TEST_CURSOR_MODELS:-}" \
     FM_FAKE_CURSOR_LIST_STATUS="${FM_TEST_CURSOR_LIST_STATUS:-0}" \
     GROK_HOME="$home/grok-home" \
@@ -1000,6 +1003,58 @@ test_opencode_probe_and_launch_share_resolved_executable() {
   assert_not_contains "$launch" "}' opencode --prompt" \
     "opencode launch must not fall back to a bare command the pane re-resolves"
   pass "opencode probe and launch share the same resolved executable path"
+}
+
+opencode_gate_spawn() {  # <case> <id> <turn-mode> -> sets OUT STATUS ENTERS
+  local rec enter_log
+  rec=$(make_spawn_case "$1" opencode "$2")
+  read_case_record "$rec"
+  enter_log="$CASE_DIR/enter.log"
+  : > "$enter_log"
+  OUT=$(FM_TEST_OPENCODE_TURN=$3 FM_TEST_ENTER_LOG="$enter_log" \
+    FM_OPENCODE_DELIVERY_POLLS=30 FM_OPENCODE_SUBMIT_SETTLE_POLLS=5 \
+    run_ship_spawn "$HOME_DIR" "$WT_DIR" "$FAKEBIN_DIR" "$LAUNCH_LOG" "$2" "$PROJ_DIR" \
+    --model anthropic/claude-sonnet-4-5)
+  STATUS=$?
+  ENTERS=$(wc -l < "$enter_log" | tr -d ' ')
+}
+
+test_opencode2_delivery_gate_accepts_auto_submitted_brief() {
+  opencode_gate_spawn profile-opencode-gate-auto profile-opencode-gate-auto-z8a auto
+  expect_code 0 "$STATUS" "opencode 2 spawn whose brief auto-submits should succeed: $OUT"
+  [ "$ENTERS" = 1 ] || fail "auto-submitted opencode 2 brief must get no extra Enter (bare Enters: $ENTERS)"
+  pass "opencode 2 delivery gate accepts an auto-submitted brief without pressing Enter"
+}
+
+test_opencode2_delivery_gate_submits_prefilled_brief_once() {
+  opencode_gate_spawn profile-opencode-gate-enter profile-opencode-gate-enter-z8b enter
+  expect_code 0 "$STATUS" "opencode 2 spawn whose brief needs one Enter should succeed: $OUT"
+  [ "$ENTERS" = 2 ] || fail "prefilled opencode 2 brief must get exactly one gate Enter (bare Enters: $ENTERS)"
+  pass "opencode 2 delivery gate sends exactly one Enter for a brief left in the composer"
+}
+
+test_opencode2_delivery_gate_fails_when_turn_never_starts() {
+  local id=profile-opencode-gate-never-z8c
+  opencode_gate_spawn profile-opencode-gate-never "$id" never
+  [ "$STATUS" -ne 0 ] || fail "opencode 2 spawn whose turn never starts must fail"
+  [ "$ENTERS" = 2 ] || fail "opencode 2 delivery gate must send exactly one Enter before failing (bare Enters: $ENTERS)"
+  assert_grep "opencode 2.0.21 did not start the brief turn" "$HOME_DIR/state/$id.status" \
+    "a never-started opencode 2 turn must record a failed status"
+  pass "opencode 2 delivery gate fails the spawn when the brief turn never starts"
+}
+
+test_opencode1_launch_has_no_delivery_gate() {
+  local rec id=profile-opencode1-gate-z8d enter_log
+  rec=$(make_spawn_case profile-opencode1-gate opencode "$id")
+  read_case_record "$rec"
+  enter_log="$CASE_DIR/enter.log"
+  : > "$enter_log"
+  OUT=$(FM_TEST_OPENCODE_VERSION=1.18.32 FM_TEST_OPENCODE_TURN=never FM_TEST_ENTER_LOG="$enter_log" \
+    run_ship_spawn "$HOME_DIR" "$WT_DIR" "$FAKEBIN_DIR" "$LAUNCH_LOG" "$id" "$PROJ_DIR" \
+    --model anthropic/claude-sonnet-4-5)
+  expect_code 0 "$?" "opencode 1.x spawn must not wait on the OpenCode 2 delivery gate: $OUT"
+  [ "$(wc -l < "$enter_log" | tr -d ' ')" = 1 ] || fail "opencode 1.x spawn must not send a gate Enter"
+  pass "opencode 1.x launches keep their pre-gate delivery"
 }
 
 test_opencode_unknown_version_takes_1x_launch_path() {
@@ -2479,6 +2534,10 @@ test_opencode1_passes_model_flag_and_variant_only_config
 test_opencode1_without_effort_keeps_permission_only_config
 test_opencode_probe_and_launch_share_resolved_executable
 test_opencode_unknown_version_takes_1x_launch_path
+test_opencode2_delivery_gate_accepts_auto_submitted_brief
+test_opencode2_delivery_gate_submits_prefilled_brief_once
+test_opencode2_delivery_gate_fails_when_turn_never_starts
+test_opencode1_launch_has_no_delivery_gate
 test_opencode_busy_plugin_provisioned_for_every_major
 test_native_effort_validator_keeps_axes_separate
 test_native_pi_ultra_is_explicit_and_model_scoped

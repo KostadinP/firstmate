@@ -4579,6 +4579,43 @@ rovo_endpoint_cleanup() {
   fm_backend_kill "$BACKEND" "$T" "$tab_id" "fm-$ID" 2>/dev/null && SPAWN_ENDPOINT_CLOSED=1 || true
 }
 
+# OpenCode 2 takes its brief on the launch command (--prompt), but some 2.x
+# releases (2.0.11) only prefill the composer and never submit it, while later
+# ones (2.0.22) submit it on their own. This post-launch gate makes both work:
+# the turn has started once the worker's own busy-state plugin has written a
+# record (source opencode-plugin; the arm-time record is source fm-spawn), so
+# the gate waits for that. If none arrives within the settle window it sends
+# one Enter - skipped when the shared composer classifier proves the composer
+# empty, since the brief has then already left it - and keeps waiting.
+# The composer is only a veto, never proof of delivery: OpenCode 2's sidebar
+# can make an already-submitted composer read pending.
+opencode2_turn_started() {
+  local rec
+  rec=$(fm_busy_record_read "$STATE_REAL" "$ID" 2>/dev/null) || return 1
+  set -f
+  # shellcheck disable=SC2086 # the record is four space-separated tokens
+  set -- $rec
+  set +f
+  [ "${2:-}" = opencode-plugin ]
+}
+
+opencode2_wait_for_delivery() {
+  local i=0 max=${FM_OPENCODE_DELIVERY_POLLS:-120} interval=${FM_OPENCODE_POLL_INTERVAL:-0.5}
+  local settle=${FM_OPENCODE_SUBMIT_SETTLE_POLLS:-20} sent=0
+  while [ "$i" -lt "$max" ]; do
+    opencode2_turn_started && return 0
+    if [ "$sent" -eq 0 ] && [ "$i" -ge "$settle" ]; then
+      sent=1
+      if [ "$(fm_backend_composer_state "$BACKEND" "$T" "$W" 2>/dev/null)" != empty ]; then
+        spawn_send_key "$T" Enter || return 1
+      fi
+    fi
+    i=$((i + 1))
+    [ "$i" -ge "$max" ] || sleep "$interval"
+  done
+  opencode2_turn_started
+}
+
 # agy carries its brief on the launch command, so it needs no delivery gate,
 # but a worktree agy does not trust parks the TUI on the folder-trust dialog
 # and an unanswered dialog sends the turn into agy's scratch directory instead
@@ -6219,6 +6256,14 @@ if [ "$HARNESS" = rovo ]; then
   fi
   if ! rovo_wait_for_delivery; then
     rovo_spawn_fail "rovo brief pointer delivery was not confirmed in window $T"
+    exit 1
+  fi
+fi
+if [ "$HARNESS" = opencode ] && [ "$OPENCODE_MAJOR" -ge 2 ]; then
+  if ! opencode2_wait_for_delivery; then
+    printf '%s\n' "$(status_stamp_line "failed: opencode $OPENCODE_VERSION did not start the brief turn in window $T")" >>"$STATE/$ID.status"
+    echo "error: opencode $OPENCODE_VERSION did not start the brief turn; inspect window $T" >&2
+    rovo_endpoint_cleanup
     exit 1
   fi
 fi
