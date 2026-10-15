@@ -2665,3 +2665,44 @@ On 2.0.11 the brief stays unsent and the shared composer classifier reads it as 
 On 2.0.22 the brief is submitted on its own, yet the composer still reads pending, which is why the gate treats the worker's busy-state plugin record as proof of delivery and the composer only as a veto on the Enter.
 `opencode debug config` on 2.0.11 normalized the launch's legacy `{"permission":{"*":"allow"}}` into an allow-all `permissions` rule; the same command printed no configuration on 2.0.22, so on 2.0.22 the legacy shape rests on the earlier 2.0.21 verification recorded in the OpenCode harness reference.
 `tests/fm-spawn-dispatch-profile.test.sh` pins the gate's three outcomes portably: an auto-submitted brief gets no extra Enter, a prefilled brief gets exactly one, and a turn that never starts fails the spawn.
+
+## OpenCode 1 compatibility of the dual-export plugins
+
+Verified on 2026-10-15 on Linux x86_64 against OpenCode 1.15.7, 1.18.20, and 1.18.31, each installed into a scratch npm prefix and run against a scratch `FM_HOME`.
+1.15.7 and 1.18.20 predate the V1 object entrypoint (`{ id, server }`) that OpenCode accepts from 1.18.29, so they exercise the named-export path of the five primary plugins; 1.18.31 exercises the object path.
+
+A copy of this checkout whose five `fm-primary-*.js` factories each append one line to a log when invoked ran one `opencode run` turn per release, and every plugin factory ran exactly once on all three:
+
+```
+opencode 1.15.7 plugin factory invocations:
+      1 fm-primary-cd-check
+      1 fm-primary-pretool-check
+      1 fm-primary-sessionstart-nudge
+      1 fm-primary-turnend-guard
+      1 fm-primary-watch-arm
+(1.18.20 and 1.18.31 printed the same five counts of 1)
+```
+
+A persistent TUI per release, with the watch-arm plugin removed from that copy so no watcher could arm and one task in flight in its home, answered one prompt; the turn-end guard queued exactly one follow-up and did not fire again after the model answered it:
+
+```
+user|Respond exactly OK. ...
+assistant|OK
+user|⁣FIRSTMATE_OP: v1 turn-end-guard: TURN WOULD END BLIND - supervision is off. ...
+assistant|NOTED
+(identical on 1.15.7, 1.18.20, and 1.18.31)
+```
+
+The credentialed watcher-continuity half of the live e2e passed on 1.18.20 and 1.18.31: the plugin started the first watcher after idle, started and ledger-linked a successor after the actionable close, the model drained and settled, no turn-end guard fired, and the model never ran the arm itself.
+
+```
+$ PATH=<release>/bin:$PATH FM_OPENCODE_LIVE_E2E=1 tests/fm-opencode-primary-live-e2e.test.sh   # Ahoy sections skipped
+ok - OpenCode 1.18.20 live E2E covered native Ahoy first/later messages, near misses, and watcher continuity
+ok - OpenCode 1.18.31 live E2E covered native Ahoy first/later messages, near misses, and watcher continuity
+```
+
+The run is pinned to the named release because the test now launches its TUI panes through the resolved `opencode` path; it previously ran whatever `opencode` the panes' login shell found.
+The full run's native Ahoy cases depend on the model's own choices and failed with the `opencode-go/deepseek-v4.1-flash` model used here (1.18.20 took Bearings on a later `/ahoy`; 1.18.31 never ran session start in the later-message setup); the unchanged test on the default branch failed at the same 1.18.31 step with that model, so those failures are not from this change.
+
+A real `bin/fm-spawn.sh --scout --harness opencode --model opencode-go/deepseek-v4.1-flash` in a private tmux server recorded `opencode_version=1.18.20` (and `1.18.31` on the second release), launched the worker as `opencode --model opencode-go/deepseek-v4.1-flash --prompt <brief>` with no `--standalone`, and the worker answered its brief.
+`bin/fm-control.sh <task> exit` then resolved the typed `/exit` from that recorded major and returned both panes to the shell.

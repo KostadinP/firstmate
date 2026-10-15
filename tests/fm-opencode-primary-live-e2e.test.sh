@@ -59,8 +59,11 @@ SESSION=opencode-live-e2e
 LAB="$ROOT/.opencode-live-e2e.$$"
 PROJECT="$LAB/project"
 HOME_DIR="$LAB/fmhome"
-OPENCODE_VERSION=$(opencode --version)
-OPENCODE_MAJOR=$(opencode_major opencode)
+# The TUI panes below start through a login shell, which can reset PATH, so
+# they launch this resolved executable rather than whatever that PATH finds.
+OPENCODE_BIN=$(command -v opencode)
+OPENCODE_VERSION=$("$OPENCODE_BIN" --version)
+OPENCODE_MAJOR=$(opencode_major "$OPENCODE_BIN")
 # OpenCode 2 runs every session on a private server (--standalone) and stores
 # sessions in session_v2/session_message; OpenCode 1 uses --pure for a
 # plugin-free run and the session/message/part tables.
@@ -325,7 +328,7 @@ run_native_ahoy_regressions() {
   [ "$session_count" = 1 ] || fail "OpenCode native first-message Ahoy left the original session"
 
   "$TMUX" -L "$SOCKET" new-session -d -s "$native_session" -c "$AHOY_PROJECT" \
-    "env OPENCODE_DB='$later_db' FM_HOME='$later_home' OPENCODE_DISABLE_AUTOUPDATE=1 OPENCODE_DISABLE_LSP_DOWNLOAD=1 OPENCODE_CONFIG_CONTENT='{\"permission\":{\"*\":\"allow\"}}' opencode $OC_PRIVATE --auto"
+    "env OPENCODE_DB='$later_db' FM_HOME='$later_home' OPENCODE_DISABLE_AUTOUPDATE=1 OPENCODE_DISABLE_LSP_DOWNLOAD=1 OPENCODE_CONFIG_CONTENT='{\"permission\":{\"*\":\"allow\"}}' '$OPENCODE_BIN' $OC_PRIVATE --auto"
   i=0
   while [ "$i" -lt 120 ]; do
     "$TMUX" -L "$SOCKET" capture-pane -p -t "$native_session" 2>/dev/null | grep -Fq "$OPENCODE_VERSION" && break
@@ -378,7 +381,7 @@ printf 'project=fixture\n' > "$HOME_DIR/state/opencode-e2e.meta"
 # shellcheck disable=SC2016 # The model, not this test shell, expands FM_HOME.
 PROMPT='Use the terminal to run `printf ready > "$FM_HOME/state/opencode-model-initial"`, then respond briefly. If a later watcher wake arrives, run bin/fm-wake-drain.sh, then run `printf handled > "$FM_HOME/state/opencode-model-handled"`. Never run or request any watcher arm command.'
 "$TMUX" -L "$SOCKET" new-session -d -s "$SESSION" -c "$PROJECT" \
-  "env OPENCODE_CONFIG_CONTENT='{\"permission\":{\"*\":\"allow\"}}' FM_HOME='$HOME_DIR' FM_ROOT_OVERRIDE='$PROJECT' FM_POLL=1 FM_SIGNAL_GRACE=0 FM_HEARTBEAT=600 bash -lc 'printf \"%s\\n\" \"\$\$\" > \"\$FM_HOME/state/.lock\"; opencode $OC_PRIVATE --auto; rc=\$?; printf \"OPENCODE_EXIT=%s\\n\" \"\$rc\"; sleep 300'"
+  "env OPENCODE_CONFIG_CONTENT='{\"permission\":{\"*\":\"allow\"}}' FM_HOME='$HOME_DIR' FM_ROOT_OVERRIDE='$PROJECT' FM_POLL=1 FM_SIGNAL_GRACE=0 FM_HEARTBEAT=600 bash -lc 'printf \"%s\\n\" \"\$\$\" > \"\$FM_HOME/state/.lock\"; \"$OPENCODE_BIN\" $OC_PRIVATE --auto; rc=\$?; printf \"OPENCODE_EXIT=%s\\n\" \"\$rc\"; sleep 300'"
 
 # Send the initial prompt through the ready composer so this exercises the same
 # persistent TUI path as a primary session.

@@ -1,6 +1,7 @@
 # OpenCode
 
 Verified on 2026-10-01 against OpenCode 2.0.21, after earlier 1.15.7 through 1.18.4 verification, with composer furniture re-verified on 2026-09-18 using 1.18.31.
+On 2026-10-15 the dual-export primary plugins loaded once each and the turn-end guard fired once on 1.15.7, 1.18.20, and 1.18.31, and watcher continuity plus the 1.x worker launch and exit passed on 1.18.20 and 1.18.31, so the plugins do not need the 1.18.29 object entrypoint (evidence in `docs/verification/runtime-backends.md`).
 
 ## Operating facts
 
