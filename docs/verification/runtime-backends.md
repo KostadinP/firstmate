@@ -2664,7 +2664,7 @@ A tmux pane launching `opencode --standalone --prompt '<brief>'` against a loopb
 On 2.0.11 the brief stays unsent and the shared composer classifier reads it as pending, so the gate's single Enter is sent and starts the turn.
 On 2.0.22 the brief is submitted on its own, yet the composer still reads pending, which is why the gate treats the worker's busy-state plugin record as proof of delivery and the composer only as a veto on the Enter.
 `opencode debug config` on 2.0.11 normalized the launch's legacy `{"permission":{"*":"allow"}}` into an allow-all `permissions` rule; the same command printed no configuration on 2.0.22, so on 2.0.22 the legacy shape rests on the earlier 2.0.21 verification recorded in the OpenCode harness reference.
-`tests/fm-spawn-dispatch-profile.test.sh` pins the gate's three outcomes portably: an auto-submitted brief gets no extra Enter, a prefilled brief gets exactly one, and a turn that never starts fails the spawn.
+`tests/fm-spawn-dispatch-profile.test.sh` pins the gate's outcomes portably: an auto-submitted brief gets no extra Enter, a prefilled brief gets exactly one, a composer that reads unknown before it draws gets its one Enter only once it reads pending, a composer that only reads unknown gets its one Enter at the submit deadline, and a turn that never starts fails the spawn.
 
 ## OpenCode 1 compatibility of the dual-export plugins
 
