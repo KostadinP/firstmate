@@ -240,10 +240,12 @@ fm_control_interrupt_ack_source() {  # <harness>
 }
 
 # The command or key that exits the agent from its own composer. OpenCode is
-# version-sensitive: 2.x leaves an idle composer on a single raw Ctrl-C
-# (verified on 2.0.21), while 1.x exits on the typed /exit command. The
-# detected major is recorded at spawn (bin/fm-spawn.sh) and passed as $2; when
-# it is absent or 1 the version-agnostic /exit is used, which exits both lines.
+# version-sensitive: 2.x exits on raw keys, where bin/fm-control.sh sends Ctrl-U
+# to clear the composer, then Ctrl-C, and one more Ctrl-C if the agent is still
+# alive (verified on 2.0.11, 2.0.21, and 2.0.22), while 1.x exits on the typed
+# /exit command. The detected major is recorded at spawn (bin/fm-spawn.sh) and
+# passed as $2; when it is absent or 1 the version-agnostic /exit is used, which
+# exits both lines.
 fm_control_exit_command() {  # <harness> [opencode-major]
   case "${1-}" in
     opencode)

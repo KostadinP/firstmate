@@ -2646,6 +2646,13 @@ ok - OpenCode 2.0.22 loaded all five V2 Firstmate plugins
 (every other fixture case also passed on both releases)
 ```
 
+The native fixture was re-run on 2026-10-15 after the seatbelt was narrowed to the shell tool's `{tool, input.command}` `execute.before` payload, and it passed on both 2.0.11 and 2.0.22.
+Its loopback provider issues a real `shell` tool call, and the persistent-cd and watcher-redirection cases assert the tool fails with the plugin's own reason and writes no escape file, which proves that payload shape live.
+
+A standalone TUI on both 2.0.11 and 2.0.22 showed the composer exit behavior `bin/fm-control.sh` relies on.
+With leftover composer text, the first Ctrl-C only clears the text and a second Ctrl-C exits.
+Ctrl-U clears the composer, and one Ctrl-C then exits.
+
 A tmux pane launching `opencode --standalone --prompt '<brief>'` against a loopback provider showed the brief-delivery difference the post-launch gate handles:
 
 ```
