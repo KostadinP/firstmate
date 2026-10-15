@@ -1,0 +1,50 @@
+   LAB_PROVIDER_ACK              +
+  ┃       daemon error is also a real block.
+  ┃       Only after ruling out socket refusal, if the run is still running or fixing, reattach and keep                                                        LAB_PROVIDER_ACK
+  ┃       going. A drive-call error, timeout, slow read, or generic unreachability is NOT a daemon error:
+  ┃       the daemon accepts `respond` immediately and runs the round in the background, so a killed or
+  ┃       timed-out call was only waiting for a read while the run kept working.
+  ┃     - The worktree pool your own worktree came from, and the repository every lane's worktree
+  ┃       shares. Never create, remove, return, prune, move, or reassign a worktree or pool slot, and
+  ┃       never write into a sibling slot's directory. Rule 2 does not cover this: removing a worktree
+  ┃       is administration rather than an edit outside your directory, and it lands on lanes that are
+  ┃       running right now. The act is the rule and commands are only examples of it - `treehouse`
+  ┃       get/return/remove/prune, the equivalent operations on any other worktree provider or runtime
+  ┃       backend, and `git worktree add|remove|move|prune`. A slot that looks unused is not evidence
+  ┃       that it is free, and returning your own worktree is firstmate's job at cleanup, not yours.
+  ┃     If you genuinely need a second checkout, another slot, or the daemon touched, append
+  ┃     `blocked [at=<epoch>]: {what you need}` and stop; firstmate arranges it.
+  ┃
+  ┃  # Firstmate instruction inbox
+  ┃  Firstmate steers you through durable message files in '/tmp/fm-lab.1Z2T74/state/oc2probe.inbox'.
+  ┃  When a terminal message says an instruction is waiting there - and at any natural checkpoint when you are unsure - list '/tmp/fm-lab.1Z2T74/state/
+  ┃  oc2probe.inbox'/*.msg, read and act on each message in numeric order, then acknowledge each handled message by moving it: `mv '/tmp/fm-lab.1Z2T74/
+  ┃  state/oc2probe.inbox'/NNN.msg '/tmp/fm-lab.1Z2T74/state/oc2probe.inbox'/handled/`.
+  ┃  The move IS the acknowledgement: without it firstmate rings again and eventually treats you as stuck. An empty or absent inbox needs no action.
+  ┃
+  ┃  # Definition of done
+  ┃  Write your findings to `/tmp/fm-lab.1Z2T74/data/oc2probe/report.md`.
+  ┃  The report must stand alone: what you did, what you found, the evidence (commands run, output, file:line references), and what you recommend.
+  ┃  If your deliverable is a visual artifact the captain will review and iterate on, use the lavish-axi rule: arm your board with bin/fm-procevent-lavish.
+  ┃  sh arm <artifact.html> --for <task-id>; never run lavish-axi poll yourself. Re-arm with the reply after each nonterminal round to acknowledge it, route
+  ┃  the board feedback through your steering inbox, write needs-decision [key=board-review] with the live board URL when the captain owes a decision, and
+  ┃  stop at session_ended or an empty End without re-arming - acknowledge that final round with bin/fm-procevent.sh handled <source-id> <sequence> to
+  ┃  conclude and retire your board.
+  ┃  Before reporting done, read and follow `/home/kostadin/.no-mistakes/worktrees/5423ee7221af/01M4Z71AHHM0EWKG9G4SCWQYK4/.agents/skills/captain-hold-
+  ┃  lifecycle/SKILL.md` and pass its shared completion gate for the report and any visual review.
+  ┃  When the report is complete, append `done [at=<epoch>]: {one-line conclusion}` to the status file and stop.
+  ┃  If your findings reveal work that should ship (e.g. you reproduced a bug and the fix is clear), say so in the report; firstmate may promote this task
+  ┃  in place, and you would then receive mode-specific ship instructions as a follow-up message.                                                                 ⬖ Getting started                ✕
+  ┃
+                                                                                                                                                                    OpenCode includes free models so
+     LAB_PROVIDER_ACK                                                                                                                                               you can start immediately.
+
+     Build · native · 63ms                                                                                                                                          Connect from 75+ providers to
+                                                                                                                                                                    use other models, including
+  ┃                                                                                                                                                                 Claude, GPT, Gemini etc
+  ┃
+  ┃                                                                                                                                                                 Connect provider        /connect
+  ┃  Build · native fixture
+  ╹▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀
+  ~/.treehouse/demo-3f762e/1/demo                                                                                          shift+tab agents  ctrl+p commands    ~/.treehouse/demo-3f762e/1/demo
+

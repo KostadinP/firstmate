@@ -1,0 +1,26 @@
+## spawn output
+spawned oc2probe harness=opencode kind=scout window=primary:fm-oc2probe worktree=/tmp/oc2-test.Rb0Pl3/home-2.0.22/.treehouse/demo-3f762e/1/demo
+SPAWN_EXIT=0
+## provider requests
+request "\u2063FIRSTMATE_OP: v1 launch-brief: # Current worker role contract\nYou are a crewmate: an autonomous worker a
+request "\u2063FIRSTMATE_OP: v1 launch-brief: # Current worker role contract\nYou are a crewmate: an autonomous worker a
+## meta (selected)
+window=primary:fm-oc2probe
+harness=opencode
+kind=scout
+opencode_version=2.0.22
+## busy record
+v1 gen=g1792050684.29528.3128 seq=3 state=idle source=opencode-plugin event=session-execution-succeeded ts=1792050688
+
+## worker opencode process
+  PID COMMAND
+30096 /tmp/oc2-test.Rb0Pl3/2.0.22/node_modules/.bin/opencode --standalone --prompt ???FIRSTMATE_OP: v1 launch-brief: # Current worker role contract You are a crewmate: an autonomous worker agent manag
+## pane
+     Build · native · 63ms                                                                                                                                          Connect from 75+ providers to
+                                                                                                                                                                    use other models, including
+  ┃                                                                                                                                                                 Claude, GPT, Gemini etc
+  ┃
+  ┃                                                                                                                                                                 Connect provider        /connect
+  ┃  Build · native fixture
+  ╹▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀
+  ~/.treehouse/demo-3f762e/1/demo                                                                                          shift+tab agents  ctrl+p commands    ~/.treehouse/demo-3f762e/1/demo

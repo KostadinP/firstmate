@@ -1,0 +1,14 @@
+## pane width
+120x50
+## 1) worker composer holds leftover text -> exit (expect refusal)
+error: task oc2probe's composer visibly holds pending text; refusing to type the C-c exit command because it would concatenate onto that text. Clear or submit the pending text, then retry 'exit'
+RC=1
+## composer row after refusal
+45:  ┃  leftover draft text
+## 2) clear composer (C-u) -> exit (expect stop)
+stopped oc2probe harness=opencode backend=tmux endpoint=primary:fm-oc2probe worktree=/tmp/oc2t3/run-2.0.22.XQTz/home/.treehouse/.treehouse/demo-79743b/1/demo
+RC=0
+## windows after exit
+bash pane_dead=0 cmd=bash
+fm-oc2probe pane_dead=0 cmd=bash
+## worker opencode process

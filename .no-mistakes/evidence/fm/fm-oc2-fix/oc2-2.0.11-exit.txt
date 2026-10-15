@@ -1,0 +1,13 @@
+## 1) worker composer holds 'leftover draft text...' -> fm-control.sh oc2probe exit
+error: task oc2probe's composer visibly holds pending text; refusing to type the C-c exit command because it would concatenate onto that text. Clear or submit the pending text, then retry 'exit'
+EXIT_RC=1
+## 2) after clearing the composer -> fm-control.sh oc2probe exit
+stopped oc2probe harness=opencode backend=tmux endpoint=primary:fm-oc2probe worktree=/tmp/oc2-test.Rb0Pl3/home-2.0.11/.treehouse/demo-3ba9bc/1/demo
+EXIT_RC=0
+## windows after exit (endpoint preserved)
+bash pane_dead=0 cmd=bash
+fm-oc2probe pane_dead=0 cmd=bash
+## worker opencode pid 22672
+gone
+## worktree
+/tmp/oc2-test.Rb0Pl3/home-2.0.11/.treehouse/demo-3ba9bc/1/demo

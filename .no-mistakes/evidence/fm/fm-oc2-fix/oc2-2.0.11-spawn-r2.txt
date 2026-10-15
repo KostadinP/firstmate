@@ -1,0 +1,22 @@
+## opencode on lab PATH
+opencode v2.0.11
+RC=0
+## brief
+scaffolded: /tmp/fm-lab.lFD3bM/data/oc2probe/brief.md (scout; replace {TASK} and {FIRSTMATE_SPEC})
+RC=0
+## spawn
+spawned oc2probe harness=opencode kind=scout window=primary:fm-oc2probe worktree=/tmp/oc2t3/run-2.0.11.fTKu/home/.treehouse/.treehouse/demo-bfb590/1/demo
+RC=0
+## provider requests
+request "\"\\u2063FIRSTMATE_OP: v1 launch-brief: # Current worker role contract\\nYou are a crewmate: an autonomous worker agent
+request "\"\\u2063FIRSTMATE_OP: v1 launch-brief: # Current worker role contract\\nYou are a crewmate: an autonomous worker agent
+## meta
+window=primary:fm-oc2probe
+harness=opencode
+kind=scout
+opencode_version=2.0.11
+## busy record
+v1 gen=g1792051733.18442.16449 seq=3 state=idle source=opencode-plugin event=session-execution-succeeded ts=1792051745
+
+## worker process
+19019 /tmp/opencode/oc2fix/2.0.11/bin/opencode --standalone --prompt ???FIRSTMATE_OP: v1 launch-brief: # Current worker role contract You are a crewmate: an autonomous worker agent managed by firstmat
