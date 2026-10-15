@@ -5168,7 +5168,7 @@ const eventType = (event) => event && (event.type || event.name) || "";
 const eventProperties = (event) => event && (event.properties || event.data) || {};
 const sessionID = (event) => {
   const properties = eventProperties(event);
-  return properties.sessionID || properties.sessionId || (properties.session && (properties.session.id || properties.session.parentID || properties.session.parentId)) || properties.id || "";
+  return properties.sessionID || properties.sessionId || (properties.session && properties.session.id) || properties.id || "";
 };
 const setupEventSubscription = (ctx, handler) => {
   if (!ctx || !ctx.event || !ctx.event.subscribe) return false;

@@ -22,23 +22,16 @@ export function setupEventSubscription(ctx, handler) {
 
 export function setupToolExecuteBefore(ctx, handler) {
   if (!ctx?.tool?.hook) return false;
-  ctx.tool.hook("execute.before", async (input, output) => {
-    await handler(input, output);
+  ctx.tool.hook("execute.before", async (event) => {
+    await handler(event);
   });
   return true;
 }
 
 export function contextDirectory(ctx) {
-  const location = ctx?.location;
   // OpenCode 2.0.x exposes the plugin's project as ctx.location.project.
-  if (typeof location?.project?.directory === "string") return location.project.directory;
-  if (typeof ctx?.worktree === "string") return ctx.worktree;
-  if (typeof ctx?.directory === "string") return ctx.directory;
-  if (typeof location?.directory === "string") return location.directory;
-  if (typeof location?.path === "string") return location.path;
-  if (typeof location?.cwd === "string") return location.cwd;
-  if (typeof location?.root === "string") return location.root;
-  return "";
+  const directory = ctx?.location?.project?.directory;
+  return typeof directory === "string" ? directory : "";
 }
 
 export function eventType(event) {
@@ -54,8 +47,6 @@ export function eventSessionID(event) {
   return properties.sessionID ??
     properties.sessionId ??
     properties.session?.id ??
-    properties.session?.parentID ??
-    properties.session?.parentId ??
     properties.info?.id ??
     properties.id ??
     "";
@@ -115,56 +106,24 @@ export function createTurnEndLatch() {
   return latch;
 }
 
-export function toolName(input) {
-  return input?.tool ?? input?.toolID ?? input?.toolId ?? input?.name ?? input?.tool?.id ?? "";
-}
-
-function findCommand(value, depth = 0) {
-  if (!value || depth > 4) return "";
-  if (typeof value === "string") return "";
-  if (typeof value !== "object") return "";
-  for (const key of ["command", "cmd", "script"]) {
-    if (typeof value[key] === "string") return value[key];
-  }
-  for (const key of ["args", "arguments", "input", "parameters", "toolCall", "tool", "payload"]) {
-    const found = findCommand(value[key], depth + 1);
-    if (found) return found;
-  }
-  return "";
-}
-
-export function toolCommand(input, output) {
-  return findCommand(output) || findCommand(input);
+// OpenCode 2's execute.before event carries the model-visible tool name and
+// its decoded input; only the shell tool runs a command line.
+export function shellCommand(event) {
+  if (event?.tool !== "shell") return "";
+  const command = event.input?.command;
+  return typeof command === "string" ? command : "";
 }
 
 export async function promptSession(ctx, client, sessionID, text) {
-  const body = { parts: [{ type: "text", text }] };
-  const attempts = [];
   if (ctx?.session?.prompt) {
     // The OpenCode 2.0.x plugin context takes a flat { sessionID, text }.
-    attempts.push(() => ctx.session.prompt({ sessionID, text }));
-    attempts.push(() => ctx.session.prompt({ sessionID, prompt: { text }, delivery: "queue" }));
-    attempts.push(() => ctx.session.prompt({ sessionID, prompt: { text } }));
-    attempts.push(() => ctx.session.prompt({ path: { sessionID }, body: { prompt: { text } } }));
+    await ctx.session.prompt({ sessionID, text });
+    return;
   }
   if (client?.session?.promptAsync) {
-    // The proven pre-port OpenCode 1 shape keys the prompt off path.id, so try
-    // it first: a generated SDK client returns {data,error} without throwing on
-    // a bad path, so a path.id-less attempt would otherwise resolve and short-
-    // circuit, silently dropping the prompt to session undefined. The
-    // path.sessionID variant stays as a defensive fallback.
-    attempts.push(() => client.session.promptAsync({ path: { id: sessionID }, body }));
-    attempts.push(() => client.session.promptAsync({ path: { sessionID }, body }));
+    // The OpenCode 1 SDK client keys the prompt off path.id.
+    await client.session.promptAsync({ path: { id: sessionID }, body: { parts: [{ type: "text", text }] } });
+    return;
   }
-  let firstError = null;
-  for (const attempt of attempts) {
-    try {
-      await attempt();
-      return;
-    } catch (error) {
-      firstError ??= error;
-    }
-  }
-  if (firstError) throw firstError;
   throw new Error("no OpenCode session prompt API is available");
 }

@@ -4292,6 +4292,89 @@ EOF
   pass "OpenCode 2 session-start nudge resolves the project location and prompts with the flat session shape"
 }
 
+test_opencode2_seatbelts_block_only_the_shell_tool() {
+  local repo out status plugin owner
+  repo="$TMP_ROOT/opencode2-seatbelt-root"
+  mkdir -p "$repo/bin"
+  git init -q "$repo"
+  for owner in fm-cd-pretool-check.sh fm-arm-pretool-check.sh; do
+    cat > "$repo/bin/$owner" <<'SH'
+#!/usr/bin/env bash
+[ "${1:-}" = --command ] || exit 0
+case "${2:-}" in
+  *DENY_ME*) printf 'seatbelt denied\n' >&2; exit 2 ;;
+esac
+exit 0
+SH
+    chmod +x "$repo/bin/$owner"
+  done
+  for plugin in fm-primary-cd-check.js fm-primary-pretool-check.js; do
+    out=$(PLUGIN="$ROOT/.opencode/plugins/$plugin" WORKTREE="$repo" node 2>&1 <<'EOF'
+import { pathToFileURL } from "node:url";
+
+let hook = null;
+const ctx = {
+  location: { project: { directory: process.env.WORKTREE } },
+  tool: { hook: (name, fn) => { if (name === "execute.before") hook = fn; } },
+};
+const mod = await import(pathToFileURL(process.env.PLUGIN).href);
+mod.default.setup(ctx);
+const call = (tool, command) => hook({ tool, sessionID: "ses-1", id: "call-1", input: { command } });
+let blocked = false;
+try {
+  await call("shell", "echo DENY_ME");
+} catch (error) {
+  blocked = String(error.message).includes("seatbelt denied");
+}
+if (!blocked) {
+  console.error("the shell tool was not blocked");
+  process.exit(1);
+}
+await call("shell", "echo allowed");
+await call("mcp_runner", "echo DENY_ME");
+await call("read", "echo DENY_ME");
+process.exit(0);
+EOF
+)
+    status=$?
+    expect_code 0 "$status" "OpenCode 2 $plugin must block the shell tool and never a non-shell tool carrying a command: $out"
+  done
+  pass "OpenCode 2 seatbelts block only the shell tool, never a non-shell or MCP tool carrying a command"
+}
+
+test_opencode2_prompt_session_never_resends_after_a_failed_attempt() {
+  local out status
+  out=$(LIB="$ROOT/.opencode/plugins/lib/fm-opencode2.js" node 2>&1 <<'EOF'
+import { pathToFileURL } from "node:url";
+
+const { promptSession } = await import(pathToFileURL(process.env.LIB).href);
+const calls = [];
+const ctx = { session: { prompt: async (arg) => { calls.push(["prompt", arg]); throw new Error("timeout after delivery"); } } };
+const client = { session: { promptAsync: async (arg) => { calls.push(["promptAsync", arg]); } } };
+let threw = false;
+try {
+  await promptSession(ctx, client, "ses-1", "wake");
+} catch {
+  threw = true;
+}
+if (!threw || calls.length !== 1 || calls[0][1].sessionID !== "ses-1" || calls[0][1].text !== "wake") {
+  console.error(JSON.stringify(calls));
+  process.exit(1);
+}
+calls.length = 0;
+await promptSession(null, client, "ses-2", "wake");
+if (calls.length !== 1 || calls[0][1].path.id !== "ses-2" || calls[0][1].body.parts[0].text !== "wake") {
+  console.error(JSON.stringify(calls));
+  process.exit(1);
+}
+process.exit(0);
+EOF
+)
+  status=$?
+  expect_code 0 "$status" "OpenCode promptSession must send once and never retry another shape: $out"
+  pass "OpenCode promptSession sends one prompt shape and never resends after a failed attempt"
+}
+
 test_opencode_primary_watch_plugin_sources_effective_config() {
   local plugin repo home log out status
   plugin="$ROOT/.opencode/plugins/fm-primary-watch-arm.js"
@@ -5346,6 +5429,8 @@ test_opencode_plugin_package_boundary_is_explicit_esm
 test_opencode_primary_watch_plugin_uses_effective_state_home
 test_opencode2_watch_plugin_arms_on_interrupted_turn_but_not_shutdown
 test_opencode2_sessionstart_nudge_prompts_with_flat_session_shape
+test_opencode2_seatbelts_block_only_the_shell_tool
+test_opencode2_prompt_session_never_resends_after_a_failed_attempt
 test_opencode_primary_watch_plugin_sources_effective_config
 test_opencode_primary_watch_plugin_requires_session_lock
 test_opencode_watch_arm_coordinator_respects_primary_scope

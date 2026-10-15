@@ -299,6 +299,13 @@ SH
   out=$(classify opencode "$id" "$state")
   [ "$out" = "busy opencode-plugin" ] || fail "a child session's terminal event must not clear the worker, got '$out'"
 
+  out=$(drive_oc_plugin "$plugin" \
+    "$(oc_exec_started ses_main)" \
+    '{"type":"session.execution.succeeded","properties":{"session":{"parentID":"ses_main"}}}') \
+    || fail "parent-keyed child exec drive failed: $out"
+  out=$(classify opencode "$id" "$state")
+  [ "$out" = "busy opencode-plugin" ] || fail "a child event carrying only its parent's id must not settle the parent, got '$out'"
+
   rm -f "$state/$id.turn-ended"
   out=$(drive_oc_plugin "$plugin" \
     "$(oc_exec_started ses_main)" \

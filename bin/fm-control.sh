@@ -730,15 +730,22 @@ do_exit() {
   # legitimately report anything. Only a hard transport failure aborts; the
   # authoritative proof is the agent-state wait below. The retried Enter still
   # matters, because a slash command opens a completion popup on some TUIs that
-  # swallows the first Enter. OpenCode 2 exits from an idle composer on a single
-  # Ctrl-C (verified on 2.0.21); typing /exit also exits but opens a completion
-  # popup, so the raw key plane avoids that popup interacting with the typed
-  # submit verification.
+  # swallows the first Enter. OpenCode 2 exits from an empty composer on a
+  # single Ctrl-C (verified on 2.0.11, 2.0.21, and 2.0.22); typing /exit also
+  # exits but opens a completion popup, so the raw key plane avoids that popup
+  # interacting with the typed submit verification. A Ctrl-C over leftover
+  # composer text only clears it, so Ctrl-U clears the composer first and one
+  # more Ctrl-C follows if the agent is still alive.
   case "$cmd" in
     C-c)
+      fm_backend_send_key "$BACKEND" "$T" C-u "$LABEL" \
+        || die "the exit key could not be sent to task $ID on $BACKEND"
       fm_backend_send_key "$BACKEND" "$T" C-c "$LABEL" \
         || die "the exit key could not be sent to task $ID on $BACKEND"
-      verdict=key_delivered
+      if ! wait_agent_state "$SETTLE_WAIT" dead >/dev/null; then
+        fm_backend_send_key "$BACKEND" "$T" C-c "$LABEL" \
+          || die "the exit key could not be sent to task $ID on $BACKEND"
+      fi
       ;;
     *)
       verdict=$(fm_backend_send_text_submit "$BACKEND" "$T" "$cmd" "$EXIT_RETRIES" "$POLL" 1.2 "$LABEL") \
