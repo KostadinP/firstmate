@@ -1,0 +1,7 @@
+stopped lab-oc2-scout harness=opencode backend=tmux endpoint=primary:fm-lab-oc2-scout worktree=/tmp/fm-lab.eXZV4x/pool/.treehouse/ocproj-c6c204/1/ocproj
+exit=0
+  █  █ █  █ █▀▀▀ █  █ █    █  █ █  █ █▀▀▀
+  ▀▀▀▀ █▀▀▀ ▀▀▀▀ ▀▀▀▀ ▀▀▀▀ ▀▀▀▀ ▀▀▀▀ ▀▀▀▀
+  Session   SCOUT_BRIEF_RECEIVED
+  Continue  opencode -s ses_ec014bfc2ffeF3N0PpPLkpm0Vx
+kostadin@ea554e6219d8:/tmp/fm-lab.eXZV4x/pool/.treehouse/ocproj-c6c204/1/ocproj$

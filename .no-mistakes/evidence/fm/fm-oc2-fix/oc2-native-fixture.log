@@ -1,0 +1,23 @@
+ok - OpenCode 2.0.11 loaded all five V2 Firstmate plugins
+ok - V2 parses the build-agent model variant and applies it when selected
+ok - native shell execute.before rejects persistent-cd before execution
+ok - native shell execute.before rejects watcher-redirection before execution
+ok - native terminal event admits a turn-end guard follow-up
+ok - native watcher prompt delivery preserves a live successor
+ok - native interrupted turn retains watcher supervision
+ok - native failed turn retains supervision and startup remains exactly once
+ok - private OpenCode server, provider, watcher, configuration and database cleaned
+ok - OpenCode 2.0.22 loaded all five V2 Firstmate plugins
+ok - V2 parses the build-agent model variant and applies it when selected
+ok - native shell execute.before rejects persistent-cd before execution
+ok - native shell execute.before rejects watcher-redirection before execution
+ok - native terminal event admits a turn-end guard follow-up
+ok - native watcher prompt delivery preserves a live successor
+ok - native interrupted turn retains watcher supervision
+ok - native failed turn retains supervision and startup remains exactly once
+ok - private OpenCode server, provider, watcher, configuration and database cleaned
+skip: /tmp/fm-oc-bins.15Wah5/1.18.20/node_modules/.bin/opencode reports 1.18.20, not OpenCode 2
+
+real	0m8.954s
+user	0m10.037s
+sys	0m2.741s

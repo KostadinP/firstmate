@@ -1,0 +1,23 @@
+rc=1
+== opencode 1.15.7
+0
+0
+rc=124
+== opencode 1.18.20
+      1 fm-primary-cd-check module-eval
+      1 fm-primary-pretool-check module-eval
+      1 fm-primary-sessionstart-nudge module-eval
+      1 fm-primary-turnend-guard module-eval
+      1 fm-primary-watch-arm module-eval
+0
+0
+== opencode 1.15.7 (fresh DB)
+      1 fm-primary-cd-check module-eval
+      1 fm-primary-pretool-check module-eval
+      1 fm-primary-sessionstart-nudge module-eval
+      1 fm-primary-turnend-guard module-eval
+      1 fm-primary-watch-arm module-eval
+== provider requests during the opencode 1.15.7 run (loopback provider)
+{"path": "/v1/chat/completions", "last_user": "\"\\\"Respond exactly OK.\\\"\""}
+{"path": "/v1/chat/completions", "last_user": "\"\\\"Respond exactly OK.\\\"\""}
+{"path": "/v1/chat/completions", "last_user": "\"<system-reminder>\\nThe user sent the following message:\\n\\u2063FIRSTMATE_OP: v1 session-start: Run `bin/fm-session-start.sh` now, exactly once, befo

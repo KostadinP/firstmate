@@ -1,0 +1,13 @@
+spawn (2.0.11, lab FM_HOME, loopback provider):
+spawned lab-oc2-scout harness=opencode kind=scout window=primary:fm-lab-oc2-scout worktree=/tmp/fm-lab.eXZV4x/pool/.treehouse/ocproj-c6c204/1/ocproj
+exit=0
+opencode_version=2.0.11
+busy record:
+provider requests:
+2 x /v1/chat/completions carrying FIRSTMATE_OP: v1 launch-brief
+
+spawn (1.18.20):
+spawned lab-oc1-scout harness=opencode kind=scout window=primary:fm-lab-oc1-scout worktree=/tmp/fm-lab.eXZV4x/pool/.treehouse/oc1proj-838102/1/oc1proj
+exit=0
+opencode_version=1.18.20
+worker argv: opencode --model fixture/native --prompt <launch-brief> (no --standalone)
