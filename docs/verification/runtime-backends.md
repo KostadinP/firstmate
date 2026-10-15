@@ -2628,3 +2628,33 @@ Without Firstmate's hooks, Herdr reported the question panel as `blocked`, which
 This live proof covers the watcher and queue boundary; it does not establish live daemon-consumer delivery.
 `bin/fm-test-run.sh tests/fm-daemon.test.sh` exercises that consumer routing separately with portable regressions for busy escalation and busy-bookkeeping failures in away and quiet mode.
 Repeat the hooked-worker check above before publication if watcher or task-inbox busy code changes; `bin/fm-test-run.sh tests/fm-task-inbox.test.sh` refreshes the portable ladder regressions.
+
+## OpenCode 2 launch and brief delivery
+
+Verified on 2026-10-15 on Linux x86_64 against OpenCode 2.0.11 and 2.0.22, each installed into a scratch npm prefix with scratch `HOME`, XDG directories, and `OPENCODE_DB`, while the host's global OpenCode 1.18 stayed in place.
+
+The token-free native plugin fixture passed on both releases:
+
+```
+$ FM_OPENCODE_LIVE_BINS="<2.0.11>/bin/opencode <2.0.22>/bin/opencode" tests/fm-opencode-primary-live-e2e.test.sh
+ok - OpenCode 2.0.11 loaded all five V2 Firstmate plugins
+ok - native shell execute.before rejects persistent-cd before execution
+ok - native terminal event admits a turn-end guard follow-up
+ok - native interrupted turn retains watcher supervision
+ok - native failed turn retains supervision and startup remains exactly once
+ok - OpenCode 2.0.22 loaded all five V2 Firstmate plugins
+(every other fixture case also passed on both releases)
+```
+
+A tmux pane launching `opencode --standalone --prompt '<brief>'` against a loopback provider showed the brief-delivery difference the post-launch gate handles:
+
+```
+2.0.11 after 20s: provider_requests=0 composer=pending
+2.0.11 after one Enter: provider_requests=2
+2.0.22 after 20s: provider_requests=2 composer=pending
+```
+
+On 2.0.11 the brief stays unsent and the shared composer classifier reads it as pending, so the gate's single Enter is sent and starts the turn.
+On 2.0.22 the brief is submitted on its own, yet the composer still reads pending, which is why the gate treats the worker's busy-state plugin record as proof of delivery and the composer only as a veto on the Enter.
+`opencode debug config` on 2.0.11 normalized the launch's legacy `{"permission":{"*":"allow"}}` into an allow-all `permissions` rule; the same command printed no configuration on 2.0.22, so on 2.0.22 the legacy shape rests on the earlier 2.0.21 verification recorded in the OpenCode harness reference.
+`tests/fm-spawn-dispatch-profile.test.sh` pins the gate's three outcomes portably: an auto-submitted brief gets no extra Enter, a prefilled brief gets exactly one, and a turn that never starts fails the spawn.
