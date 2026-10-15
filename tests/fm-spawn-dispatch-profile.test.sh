@@ -1005,18 +1005,20 @@ test_opencode_probe_and_launch_share_resolved_executable() {
   pass "opencode probe and launch share the same resolved executable path"
 }
 
-opencode_gate_spawn() {  # <case> <id> <turn-mode> -> sets OUT STATUS ENTERS
+opencode_gate_spawn() {  # <case> <id> <turn-mode> [unknown-reads] -> sets OUT STATUS ENTERS READS
   local rec enter_log
   rec=$(make_spawn_case "$1" opencode "$2")
   read_case_record "$rec"
   enter_log="$CASE_DIR/enter.log"
   : > "$enter_log"
   OUT=$(FM_TEST_OPENCODE_TURN=$3 FM_TEST_ENTER_LOG="$enter_log" \
-    FM_OPENCODE_DELIVERY_POLLS=30 FM_OPENCODE_SUBMIT_SETTLE_POLLS=5 \
+    FM_FAKE_OPENCODE_COMPOSER_UNKNOWN_READS=${4:-} \
+    FM_OPENCODE_DELIVERY_POLLS=30 FM_OPENCODE_SUBMIT_SETTLE_POLLS=5 FM_OPENCODE_SUBMIT_DEADLINE_POLLS=15 \
     run_ship_spawn "$HOME_DIR" "$WT_DIR" "$FAKEBIN_DIR" "$LAUNCH_LOG" "$2" "$PROJ_DIR" \
     --model anthropic/claude-sonnet-4-5)
   STATUS=$?
   ENTERS=$(wc -l < "$enter_log" | tr -d ' ')
+  READS=$(cat "$WT_DIR/.opencode/plugins/fm-busy-state.js.fake-composer-reads" 2>/dev/null || echo 0)
 }
 
 test_opencode2_delivery_gate_accepts_auto_submitted_brief() {
@@ -1031,6 +1033,22 @@ test_opencode2_delivery_gate_submits_prefilled_brief_once() {
   expect_code 0 "$STATUS" "opencode 2 spawn whose brief needs one Enter should succeed: $OUT"
   [ "$ENTERS" = 2 ] || fail "prefilled opencode 2 brief must get exactly one gate Enter (bare Enters: $ENTERS)"
   pass "opencode 2 delivery gate sends exactly one Enter for a brief left in the composer"
+}
+
+test_opencode2_delivery_gate_waits_out_unknown_composer_for_pending() {
+  opencode_gate_spawn profile-opencode-gate-late profile-opencode-gate-late-z8e enter 3
+  expect_code 0 "$STATUS" "opencode 2 spawn whose composer draws late should succeed: $OUT"
+  [ "$ENTERS" = 2 ] || fail "late-drawn opencode 2 composer must get exactly one gate Enter (bare Enters: $ENTERS)"
+  [ "$READS" = 4 ] || fail "gate Enter must wait out 3 unknown reads and fire on the first pending one (composer reads: $READS)"
+  pass "opencode 2 delivery gate keeps polling an unknown composer and sends one Enter once it reads pending"
+}
+
+test_opencode2_delivery_gate_sends_enter_at_deadline_when_unknown() {
+  opencode_gate_spawn profile-opencode-gate-blind profile-opencode-gate-blind-z8f enter
+  expect_code 0 "$STATUS" "opencode 2 spawn whose composer always reads unknown should succeed: $OUT"
+  [ "$ENTERS" = 2 ] || fail "always-unknown opencode 2 composer must get exactly one gate Enter (bare Enters: $ENTERS)"
+  [ "$READS" = 11 ] || fail "always-unknown composer must get its Enter only at the submit deadline (composer reads: $READS)"
+  pass "opencode 2 delivery gate sends its one Enter at the deadline when the composer only reads unknown"
 }
 
 test_opencode2_delivery_gate_fails_when_turn_never_starts() {
@@ -2536,6 +2554,8 @@ test_opencode_probe_and_launch_share_resolved_executable
 test_opencode_unknown_version_takes_1x_launch_path
 test_opencode2_delivery_gate_accepts_auto_submitted_brief
 test_opencode2_delivery_gate_submits_prefilled_brief_once
+test_opencode2_delivery_gate_waits_out_unknown_composer_for_pending
+test_opencode2_delivery_gate_sends_enter_at_deadline_when_unknown
 test_opencode2_delivery_gate_fails_when_turn_never_starts
 test_opencode1_launch_has_no_delivery_gate
 test_opencode_busy_plugin_provisioned_for_every_major

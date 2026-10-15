@@ -4585,8 +4585,11 @@ rovo_endpoint_cleanup() {
 # the turn has started once the worker's own busy-state plugin has written a
 # record (source opencode-plugin; the arm-time record is source fm-spawn), so
 # the gate waits for that. If none arrives within the settle window it sends
-# one Enter - skipped when the shared composer classifier proves the composer
-# empty, since the brief has then already left it - and keeps waiting.
+# one Enter once the shared composer classifier reads the brief as pending -
+# skipped when it proves the composer empty, since the brief has then already
+# left it - and keeps waiting. An unknown read (a TUI that has not drawn yet)
+# keeps polling and only spends the Enter at the later submit deadline, so a
+# backend whose classifier can only answer unknown still gets its one Enter.
 # The composer is only a veto, never proof of delivery: OpenCode 2's sidebar
 # can make an already-submitted composer read pending.
 opencode2_turn_started() {
@@ -4601,13 +4604,17 @@ opencode2_turn_started() {
 
 opencode2_wait_for_delivery() {
   local i=0 max=${FM_OPENCODE_DELIVERY_POLLS:-120} interval=${FM_OPENCODE_POLL_INTERVAL:-0.5}
-  local settle=${FM_OPENCODE_SUBMIT_SETTLE_POLLS:-20} sent=0
+  local settle=${FM_OPENCODE_SUBMIT_SETTLE_POLLS:-20} deadline=${FM_OPENCODE_SUBMIT_DEADLINE_POLLS:-80}
+  local sent=0 composer
   while [ "$i" -lt "$max" ]; do
     opencode2_turn_started && return 0
     if [ "$sent" -eq 0 ] && [ "$i" -ge "$settle" ]; then
-      sent=1
-      if [ "$(fm_backend_composer_state "$BACKEND" "$T" "$W" 2>/dev/null)" != empty ]; then
-        spawn_send_key "$T" Enter || return 1
+      composer=$(fm_backend_composer_state "$BACKEND" "$T" "$W" 2>/dev/null)
+      if [ "$composer" != unknown ] || [ "$i" -ge "$deadline" ]; then
+        sent=1
+        if [ "$composer" != empty ]; then
+          spawn_send_key "$T" Enter || return 1
+        fi
       fi
     fi
     i=$((i + 1))

@@ -129,6 +129,10 @@ fake_opencode_turn_starts() {
 # FM_FAKE_OPENCODE_TURN picks what a launched OpenCode 2 worker does with its
 # brief: auto (default) starts the turn on launch, enter waits for one Enter,
 # never leaves it unsent. The pending-Enter marker sits beside the plugin.
+# Each composer cursor read is counted beside the plugin; the composer reads
+# unknown (no numeric cursor row) unless FM_FAKE_OPENCODE_COMPOSER_UNKNOWN_READS
+# is set, in which case the reads past that count render a drawn composer that
+# holds the brief while the pending-Enter marker exists.
 fake_opencode_launched() {
   case "${FM_FAKE_OPENCODE_TURN:-auto}" in
     auto) fake_opencode_turn_starts ;;
@@ -141,8 +145,36 @@ fake_opencode_launched() {
 case "$*" in
   *"#{pane_current_path}"*) printf '%s\n' "${FM_FAKE_PANE_PATH:-}"; exit 0 ;;
 esac
+fake_opencode_composer_drawn() {
+  local reads
+  reads=$(cat "$(fake_opencode_plugin).fake-composer-reads" 2>/dev/null) || reads=0
+  [ -n "${FM_FAKE_OPENCODE_COMPOSER_UNKNOWN_READS:-}" ] \
+    && [ "$reads" -gt "$FM_FAKE_OPENCODE_COMPOSER_UNKNOWN_READS" ]
+}
 case "${1:-}" in
-  display-message) printf 'firstmate\n'; exit 0 ;;
+  display-message)
+    case "$*" in
+      *"#{cursor_y}"*)
+        if [ -f "$(fake_opencode_plugin)" ]; then
+          reads=$(cat "$(fake_opencode_plugin).fake-composer-reads" 2>/dev/null) || reads=0
+          printf '%s\n' "$((reads + 1))" > "$(fake_opencode_plugin).fake-composer-reads"
+          if fake_opencode_composer_drawn; then printf '1\n'; exit 0; fi
+        fi
+        ;;
+    esac
+    printf 'firstmate\n'
+    exit 0
+    ;;
+  capture-pane)
+    if ! fake_opencode_composer_drawn; then
+      :
+    elif [ -f "$(fake_opencode_plugin).fake-pending" ]; then
+      printf '╭──────────────╮\n│ prefilled    │\n╰──────────────╯\n'
+    else
+      printf '╭────╮\n│    │\n╰────╯\n'
+    fi
+    exit 0
+    ;;
   list-windows)
     if [ -n "${FM_FAKE_DUPLICATE_WINDOW:-}" ]; then
       printf '%s\n' "$FM_FAKE_DUPLICATE_WINDOW"
