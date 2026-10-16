@@ -1,0 +1,55 @@
+ok - fm-control exit: a recorded OpenCode major picks /exit (1.x) or Ctrl-U then Ctrl-C (2.x)
+ok - fm-control exit: OpenCode 2.x retries Ctrl-C exactly once while the agent is still alive
+ok - fm-control Devin interrupt: a revert picker a press opened is closed with Escape, never Enter
+ok - fm-control interrupt: opencode needs a double Escape, claude a single one
+ok - fm-control interrupt: a backend that cannot deliver the harness's key refuses instead of sending another
+ok - fm-control interrupt: refuses when no agent is running rather than keying a shell
+ok - fm-control exit: a busy agent receives interrupt delivery before the exit command
+ok - fm-control exit: the Enter that opens the background-task picker is not followed by a confirming Enter
+ok - fm-control interrupt: unconfirmed delivery preserves observed busy state
+ok - fm-control exit: a stubborn agent reports delivered input and an unconfirmed exit
+ok - fm-control interrupt: grok reports delivery without claiming cancellation
+ok - Pi actionable close starts one successor before wake delivery settles
+ok - Pi superseded handling delivery carries no rejection appendix and is logged
+ok - Pi superseded handling delivery is offered to the branch like a confirmed one
+ok - Pi streaming-time wake delivery keeps the successor chain and replays only unconsumed wakes
+ok - Pi retries a verified successor that failed during wake delivery once that delivery settles
+ok - OpenCode plugins have an explicit ESM boundary even under a typeless parent package
+ok - OpenCode watcher plugin uses the effective FM_HOME state
+ok - OpenCode 2 watch plugin arms on an interrupted turn from the project location and ignores shutdown
+ok - OpenCode 2 session-start nudge resolves the project location and prompts with the flat session shape
+ok - OpenCode 2 seatbelts block only the shell tool, never a non-shell or MCP tool carrying a command
+ok - OpenCode promptSession sends one prompt shape and never resends after a failed attempt
+ok - OpenCode watcher plugin sources the effective config
+ok - OpenCode watcher plugin requires session lock ownership
+ok - OpenCode watcher coordinator respects primary scope
+ok - OpenCode watcher plugin starts one successor before wake prompt delivery settles
+ok - OpenCode watcher plugin runs the supervision host on an opted-in home and relays every host line (away record)
+ok - OpenCode watcher plugin runs the supervision host on an opted-in home and relays every host line (quiet record)
+ok - OpenCode pre-ready actionable close preserves its successor
+ok - OpenCode hung successor falls back to one typed actionable wake
+ok - OpenCode unretired successor falls back without an overlapping retry
+ok - OpenCode late unretired closes resume classified supervision
+ok - OpenCode clean empty close triggers a bounded continuity retry
+ok - OpenCode established clean closes stop at the configured retry limit
+ok - OpenCode close handler verifies session-lock ownership before successor launch
+ok - OpenCode watcher plugin coordinates with the turn-end guard
+ok - OpenCode healthy arm output does not suppress the turn-end guard
+ok - fm-spawn: actual ship/scout launch commands deliver the worker role contract
+ok - opencode receives the model and effort through its config
+ok - opencode without an effort keeps the model pin and omits variant
+ok - opencode emits the variant for an effort the openai family exposes
+ok - opencode omits the variant for an effort outside the model family's list
+ok - opencode 1.x keeps the --model flag and the variant-only config
+ok - opencode 1.x without an effort keeps its permission-only launch config
+ok - opencode probe and launch share the same resolved executable path
+ok - opencode with an unparseable version falls back to the 1.x launch path
+ok - opencode 2 delivery gate accepts an auto-submitted brief without pressing Enter
+ok - opencode 2 delivery gate sends exactly one Enter for a brief left in the composer
+ok - opencode 2 delivery gate keeps polling an unknown composer and sends one Enter once it reads pending
+ok - opencode 2 delivery gate sends its one Enter at the deadline when the composer only reads unknown
+ok - opencode 2 delivery gate fails the spawn when the brief turn never starts
+ok - opencode 1.x launches keep their pre-gate delivery
+ok - opencode provisions a busy-state plugin for every detected major, including the 1.x fallback
+ok - Pi scout spawn enters the recorded worktree before launch
+ok - fm-spawn: a Claude launch longer than 1024 bytes is delivered intact through the staging path
