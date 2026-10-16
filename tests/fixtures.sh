@@ -151,6 +151,7 @@ fake_opencode_composer_drawn() {
   [ -n "${FM_FAKE_OPENCODE_COMPOSER_UNKNOWN_READS:-}" ] \
     && [ "$reads" -gt "$FM_FAKE_OPENCODE_COMPOSER_UNKNOWN_READS" ]
 }
+window_file="$(dirname "$0")/.spawn-window"
 case "${1:-}" in
   display-message)
     case "$*" in
@@ -179,9 +180,24 @@ case "${1:-}" in
     if [ -n "${FM_FAKE_DUPLICATE_WINDOW:-}" ]; then
       printf '%s\n' "$FM_FAKE_DUPLICATE_WINDOW"
     fi
+    [ ! -s "$window_file" ] || cat "$window_file"
     exit 0
     ;;
-  has-session|new-session|new-window|kill-window|set-window-option) exit 0 ;;
+  new-window)
+    name=
+    previous=
+    for arg in "$@"; do
+      [ "$previous" = -n ] && name=$arg
+      previous=$arg
+    done
+    printf '%s\n' "$name" > "$window_file"
+    exit 0
+    ;;
+  kill-window)
+    : > "$window_file"
+    exit 0
+    ;;
+  has-session|new-session|set-window-option) exit 0 ;;
   send-keys)
     prev=
     for a in "$@"; do
