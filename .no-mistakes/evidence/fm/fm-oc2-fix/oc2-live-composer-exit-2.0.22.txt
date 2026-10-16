@@ -1,0 +1,45 @@
+== 2.0.22 idle composer state: empty
+== 2.0.22 after typing text: pending
+== 2.0.22 after Ctrl-U: empty
+== 2.0.22 after one Ctrl-C: exited
+--- typed pane ---
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                                                          ▄
+                                         █▀▀█ █▀▀█ █▀▀█ █▀▀▄ █▀▀▀ █▀▀█ █▀▀█ █▀▀█
+                                         █  █ █  █ █▀▀▀ █  █ █    █  █ █  █ █▀▀▀
+                                         ▀▀▀▀ █▀▀▀ ▀▀▀▀ ▀▀▀▀ ▀▀▀▀ ▀▀▀▀ ▀▀▀▀ ▀▀▀▀
+
+
+                       ┃
+                       ┃  leftover brief text
+                       ┃
+                       ┃  Build · GPT-6.1 Sol (US) Amazon Bedrock
+                       ╹▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀
+                       /tmp/oc2probe.BEBk/proj:master            shift+tab agents  ctrl+p commands
+
+
+
+
+
+
+
+
+
+
+
+
+                                                                                                                2.0.22
+
